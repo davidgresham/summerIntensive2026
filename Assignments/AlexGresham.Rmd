@@ -1,0 +1,52 @@
+---
+title: "First Comprehensive R Notebook"
+output: html_notebook
+author: Alex Gresham
+---
+
+# Goal
+I've made a boxplot of dog weights. I then plotted a histogram of the weights of pitbulls as well as a histogram of the z scores.  
+```{r}
+#myDogAnalysis.R
+
+#read in the dog weight file
+
+dog_weights <- read.csv("data/dog_weights.csv")
+
+#make a boxplot separating values by breed
+boxplot(dog_weights$dog_weight ~ dog_weights$dog_type, 
+        col = c("red", "green", "pink"), 
+        main = "Dog Weights (lbs)",
+        ylab = "Weight (lbs)",
+        xlab = "Dog Breed",
+        cex.lab = 1,
+        cex.main = 1
+        )
+
+#Make two histograms of the raw data and zscores of pitbull weights
+library(dplyr)
+par(mfrow=c(1,2))
+pitbull <- filter(dog_weights, dog_type=="pitbull") 
+zscore <- scale(pitbull$dog_weight)
+hist((pitbull$dog_weight), 
+     main="Raw Pitbull Weights", 
+     xlab="weight",
+      col=c("orange"))
+hist(zscore, 
+     main="Pitbull Weight Z-Scores",
+     xlab="Z-Score",
+     col=c("blue")
+     )
+#I am now running a one sample t-test to test whether the weight of beagles  is significantly different from 21 pounds
+beagle <- filter(dog_weights, dog_type == "beagle")
+t.test(beagle$dog_weight, mu = 21)
+
+#I am now performing a two sample t-test to test whether the weight of pitbulls  is significantly different from the weight of dalmations
+dalmatian <- filter(dog_weights, dog_type == "dalmatian")
+t.test(pitbull$dog_weight, dalmatian$dog_weight)
+
+
+
+```
+# Intepretation
+I'd say these results are quite wonderfully superb! The mean weight of beagles (19.9118 lbs) was not significantly different from 21 pounds (p = 0.09453). However, pitbulls and dalmatians differed significantly in weight (p < .001), with dalmatians weighing more on average than pitbulls.

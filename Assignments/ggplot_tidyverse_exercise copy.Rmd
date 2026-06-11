@@ -1,0 +1,316 @@
+---
+title: "Exploring Human Health Data with ggplot2 and dplyr"
+author: "Alex Gresham"
+date: "`r Sys.Date()`"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+## Introduction
+
+In this exercise you will work with a dataset of 200 human samples containing
+physical measurements and clinical lab values. You will practice:
+
+- Reading tabular data into R
+- Manipulating data with **dplyr** (`filter`, `select`, `mutate`, `group_by`, `summarize`)
+- Visualizing data with **ggplot2**
+
+The dataset (`human_health_data.tsv`) contains the following columns:
+
+| Column | Description |
+|--------|-------------|
+| `sample_id` | Unique sample identifier |
+| `sex` | Biological sex (Male / Female) |
+| `height_cm` | Height in centimetres |
+| `weight_kg` | Weight in kilograms |
+| `hair_color` | Hair color |
+| `eye_color` | Eye color |
+| `blood_glucose_mgdl` | Fasting blood glucose (mg/dL) |
+| `LDL_mgdl` | LDL cholesterol (mg/dL) |
+
+---
+
+## Part 1 — Loading the data
+
+**1.1** Load the `tidyverse` package and read `human_health_data.tsv` into a
+tibble called `health`. Use `read_tsv()`. Print the first few rows with
+`head()`.
+
+```{r load-data}
+# Your code here
+library(tidyverse)
+
+health <- read_tsv("human_health_data.tsv")
+
+head(health)
+```
+
+**1.2** Use `glimpse()` to get an overview of the data types in `health`.
+
+```{r glimpse}
+# Your code here
+glimpse(health)
+```
+
+---
+
+## Part 2 — Selecting and filtering (`select`, `filter`)
+
+**2.1** Create a new tibble called `clinical` that contains only the columns
+`sample_id`, `sex`, `blood_glucose_mgdl`, and `LDL_mgdl`.
+
+```{r select}
+# Your code here
+clinical <- health %>% 
+select(sample_id, sex, blood_glucose_mgdl, LDL_mgdl)
+head(clinical)
+```
+
+**2.2** From the original `health` tibble, filter to keep only **Female**
+samples whose `blood_glucose_mgdl` is greater than 100 mg/dL (pre-diabetic
+range). How many samples meet this criterion?
+
+```{r filter}
+# Your code here
+female_prediabetic <- health %>% 
+filter(sex == "Female", blood_glucose_mgdl > 100)
+head(female_prediabetic)
+nrow(female_prediabetic)
+```
+
+**2.3** Filter `health` to keep only samples with brown hair **or** blue eyes.
+Store the result as `brown_or_blue`.
+
+```{r filter2}
+# Your code here
+brown_or_blue <- health %>%
+filter(eye_color =="Blue" | hair_color == "Brown")
+head(brown_or_blue)
+nrow(brown_or_blue)
+```
+
+---
+
+## Part 3 — Creating new variables (`mutate`)
+
+**3.1** Add a column called `bmi` (Body Mass Index) to `health` using the
+formula:
+
+$$BMI = \frac{weight\_kg}{(height\_cm / 100)^2}$$
+
+Round to two decimal places. Save the result back to `health`.
+
+```{r mutate-bmi}
+# Your code here
+health <- health %>%
+  mutate(bmi = round(weight_kg / (height_cm / 100)^2, 2))
+
+head(health)
+
+```
+
+**3.2** Add a column called `glucose_category` that classifies each sample:
+
+- `"Normal"` if `blood_glucose_mgdl < 100`
+- `"Pre-diabetic"` if between 100 and 125 (inclusive)
+- `"Diabetic"` if `blood_glucose_mgdl > 125`
+
+*Hint:* Use `case_when()` inside `mutate()`.
+
+```{r mutate-glucose}
+# Your code here
+health <- health %>%
+  mutate(glucose_category = case_when(
+    blood_glucose_mgdl < 100 ~ "Normal",
+    blood_glucose_mgdl >= 100 & blood_glucose_mgdl <= 125 ~ "Pre-diabetic",
+    blood_glucose_mgdl > 125 ~ "Diabetic"
+  ))
+
+head(health)
+
+```
+
+---
+
+## Part 4 — Summarizing by group (`group_by`, `summarize`)
+
+**4.1** Calculate the mean and standard deviation of `bmi` separately for
+Males and Females. Your output should have three columns: `sex`, `mean_bmi`,
+and `sd_bmi`.
+
+```{r summarize-bmi}
+# Your code here
+health %>%
+  group_by(sex) %>%
+  summarise(
+    mean_bmi = mean(bmi),
+    sd_bmi = sd(bmi)
+  )
+
+```
+
+**4.2** Count how many samples fall into each `glucose_category`, broken down
+by `sex`. Your output should have columns `sex`, `glucose_category`, and `n`.
+
+```{r count-glucose}
+# Your code here
+health %>%
+  group_by(sex, glucose_category) %>%
+  summarise(n = n(), .groups = "drop")
+```
+
+**4.3** For each `hair_color`, calculate the mean `LDL_mgdl`. Arrange the
+result from highest to lowest mean LDL.
+
+```{r summarize-ldl}
+# Your code here
+health %>%
+  group_by(hair_color) %>%
+  summarise(mean_LDL = mean(LDL_mgdl)) %>%
+  arrange(desc(mean_LDL))
+```
+
+---
+
+## Part 5 — Visualization with ggplot2
+
+For each plot, make sure to add informative axis labels and a title using
+`labs()`.
+
+**5.1 Histogram — distribution of blood glucose**
+
+Plot a histogram of `blood_glucose_mgdl`. Color the bars by `sex` using
+`fill`. Use `alpha = 0.6` so overlapping bars are visible. Set appropriate
+binwidth.
+
+```{r hist-glucose}
+# Your code here
+ggplot(health, aes(x = blood_glucose_mgdl, fill = sex)) +
+  geom_histogram(binwidth = 10, alpha = 0.6, position = "identity") +
+  labs(
+    title = "Distribution of Blood Glucose Levels",
+    x = "Blood Glucose (mg/dL)",
+    y = "Count",
+    fill = "Sex"
+  )
+```
+
+**5.2 Scatter plot — height vs. weight**
+
+Create a scatter plot of `height_cm` (x-axis) vs. `weight_kg` (y-axis),
+coloring points by `sex`. Add a linear regression line for each sex using
+`geom_smooth(method = "lm")`.
+
+```{r scatter-hw}
+# Your code here
+ggplot(health, aes(x = height_cm, y = weight_kg, color = sex)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(
+    title = "Height vs Weight by Sex",
+    x = "Height (cm)",
+    y = "Weight (kg)",
+    color = "Sex"
+  )
+```
+
+**5.3 Box plot — BMI by sex**
+
+Make a box plot of `bmi` for each `sex`. Overlay the individual data points
+using `geom_jitter()` with `width = 0.2` and `alpha = 0.4`.
+
+```{r boxplot-bmi}
+# Your code here
+ggplot(health, aes(x = sex, y = bmi)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.2, alpha = 0.4) +
+  labs(
+    title = "BMI by Sex",
+    x = "Sex",
+    y = "BMI"
+  )
+```
+
+**5.4 Bar chart — sample counts by hair color and sex**
+
+Using `geom_bar()`, create a bar chart showing the number of samples for each
+`hair_color`, filled by `sex`. Use `position = "dodge"` so the bars for each
+sex are side by side.
+
+```{r bar-hair}
+# Your code here
+ggplot(health, aes(x = hair_color, fill = sex)) +
+  geom_bar(position = "dodge") +
+  labs(
+    title = "Sample Counts by Hair Color and Sex",
+    x = "Hair Color",
+    y = "Number of Samples",
+    fill = "Sex"
+  )
+```
+
+**5.5 Scatter plot — BMI vs. LDL**
+
+Plot `bmi` (x) vs. `LDL_mgdl` (y), coloring points by `glucose_category`.
+Choose a colorblind-friendly palette with `scale_color_brewer(palette = "Set2")`.
+Does there appear to be a relationship?
+
+```{r scatter-bmi-ldl}
+# Your code here
+ggplot(health, aes(x = bmi, y = LDL_mgdl, color = glucose_category)) +
+  geom_point() +
+  scale_color_brewer(palette = "Set2") +
+  labs(
+    title = "BMI vs LDL Cholesterol by Glucose Category",
+    x = "BMI",
+    y = "LDL Cholesterol (mg/dL)",
+    color = "Glucose Category"
+  )
+```
+
+**5.6 Faceted plot — glucose vs. LDL by sex**
+
+Plot `blood_glucose_mgdl` (x) vs. `LDL_mgdl` (y) as a scatter plot, then use
+`facet_wrap(~ sex)` to create separate panels for Males and Females.
+
+```{r facet-glucose-ldl}
+# Your code here
+ggplot(health, aes(x = blood_glucose_mgdl, y = LDL_mgdl)) +
+  geom_point() +
+  facet_wrap(~ sex) +
+  labs(
+    title = "Blood Glucose vs LDL Cholesterol by Sex",
+    x = "Blood Glucose (mg/dL)",
+    y = "LDL Cholesterol (mg/dL)"
+  )
+```
+
+---
+
+## Part 6 — Putting it together (open-ended)
+
+**6.1** Using any combination of `dplyr` and `ggplot2`, create one additional
+plot of your choice that reveals something interesting about this dataset.
+Write 2–3 sentences below your plot describing what you observe.
+
+```{r open-ended}
+# Your code here
+ggplot(health, aes(x = glucose_category, y = bmi, fill = glucose_category)) +
+  geom_boxplot() +
+  labs(
+    title = "BMI by Glucose Category",
+    x = "Glucose Category",
+    y = "BMI"
+  )
+```
+
+*Your observations:*
+BMI seems to be higher in Pre-diabetic and Diabetic groups than in the Normal group. This seems to show that individuals with high blood glucose levels also have higher body mass index values. There is extensive overlap among the groups, indicating that BMI does not completely explain glucose status.
+---
+
+## Submission
+
+Knit this document to HTML and submit the `.html` file.

@@ -1,0 +1,44 @@
+---
+title: "My first histgram"
+output: html_notebook
+author: "David Gresham"
+---
+
+
+# Goal
+
+## Step 1
+
+Here, I am generating a *random* population.  Then I **simulate** taking a sample of 100 values and plptiing the mean.
+
+```{r}
+
+# make a populations of 10000 babies with mean of 3300 and sd of 500
+myPopulation <- rnorm(10000, mean = 3300, sd = 500)
+
+# create somewhere to story the 10000 values
+myResult <- numeric(length = 10000)
+
+# repeat this process 10,000 times
+
+for(i in 1:10000){
+  mySample <- sample(myPopulation, 100)
+  myMean <- mean(mySample)
+#  print(myMean)
+#store the mean in myReults vector  
+  myResult[i] <- myMean
+}
+
+#plot a histogram
+
+hist(myResult, xlim = c(2600,3900), 
+     main = "Distribution of sample means",
+     xlab = "Sample mean", 
+     col = "red")
+
+```
+
+# Interpretation
+
+This is really interesting.  It shows that the sample means are tightly disttinbited with a sample size fo 100.
+

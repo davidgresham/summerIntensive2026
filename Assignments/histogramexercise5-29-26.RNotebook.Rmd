@@ -1,0 +1,67 @@
+---
+title: "Histogram of Infant Birth Weights"
+author: "Tanishka Joshi"
+output: html_notebook
+---
+
+# Goal
+
+Here I am **testing**
+
+```{r}
+
+#define variables
+sample.means <- numeric()
+sample.means2 <- numeric()
+sample.means3 <- numeric()
+
+
+#population of 10000 infant birth weights with a mean of 3300 grams and standard deviation of 500
+pop.birthweight <- rnorm(10000, mean=3300, sd=500)
+
+#sample of n=10, n=100, n=1000 infants and calculate sample mean
+sample1 <- sample(pop.birthweight, size=10)
+sample1Mean <- mean(sample1)
+
+sample2 <- sample(pop.birthweight, size=100)
+sample2Mean <- mean(sample2)
+
+sample3 <- sample(pop.birthweight, size=1000)
+sample3Mean <- mean(sample3)
+
+#repeat 10000 times for each sample size 
+
+for (i in 1:10000){
+  this.sample <- sample(pop.birthweight, size=10)
+  sample.means[i] <- mean(this.sample)
+}
+
+for (i in 1:10000){
+  this.sample2 <- sample(pop.birthweight, size=100)
+  sample.means2[i] <- mean(this.sample2)
+}
+
+for (i in 1:10000){
+  this.sample3 <- sample(pop.birthweight, size=1000)
+  sample.means3[i] <- mean(this.sample3)
+}
+
+#plot a histogram of the distribution of sample means for each sample size
+
+hist(sample.means, col="green", main="Distribution of Sample Mean Birthweight n=10")
+
+hist(sample.means2, col="red", main="Distribution of Sample Mean Birthweight n=100")
+
+hist(sample.means3, col="purple", main="Distribution of Sample Mean Birthweight n=1000")
+```
+
+# Conclusion:
+
+## Conclusion 1
+
+The distributions of sample mean birth weights are approximately bell-shaped and centered around 3300 grams for all sample sizes, indicating the sample mean is an unbiased estimator of the population mean. 
+
+## Conclusions 2
+
+As the sample size increases from 10 to 100 to 1000, the histograms become narrower, showing that larger samples lead to more precise estimates of the true mean.
+

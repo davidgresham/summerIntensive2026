@@ -1,0 +1,4 @@
+D5_Fragment.FOR	TTACATGACTTACttatttgtacaattcatcaataccatgggtaataccag
+D5_Fragment.REV	CGACCTATCCatgtctaaaggtgaagaattattcactggtg
+D5_Vector.FOR	ttgtacaaataaGTAAGTCATGTAATTAGTTATGTCACGCTTACATTCAC
+D5_Vector.REV	ctttagacatGGATAGGTCGCTAGCAGAACCAC

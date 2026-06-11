@@ -1,0 +1,61 @@
+---
+title: "Infant Population R Assignment"
+output: html_notebook
+author: Luca Clark-Shaw
+---
+
+# Goal
+Do an analysis of the sampling distribution of the mean
+
+```{r}
+# make a population of 10000 babies with mean of 3300 and sd of 500
+
+myPopulation <- rnorm(10000, mean = 3300, sd = 500)
+
+# store the mean in myResult vector
+
+myResult <- numeric(length = 10000)
+
+# repeat 10000 times using a loop
+
+for(i in 1:10000) {
+  mySample <- sample(myPopulation, 10)
+  myMean <- mean(mySample)
+  myResult[i] <- myMean
+}
+# plot the histograms of values
+
+hist(myResult, xlim = c(2600,3900),
+     main = "Distribution of Sample Means n=10",
+     xlab = "Sample mean",
+     col = "red")
+
+myResult <- numeric(length = 10000)
+
+for(i in 1:10000) {
+  mySample <- sample(myPopulation, 100)
+  myMean <- mean(mySample)
+  myResult[i] <- myMean
+}
+hist(myResult, xlim = c(2600,3900),
+     main = "Distribution of Sample Means n=100",
+     xlab = "Sample mean",
+     col = "red")
+
+myResult <- numeric(length = 10000)
+
+for(i in 1:10000) {
+  mySample <- sample(myPopulation, 1000)
+  myMean <- mean(mySample)
+  myResult[i] <- myMean
+}
+hist(myResult, xlim = c(2600,3900),
+     main = "Distribution of Sample Means n=1000",
+     xlab = "Sample mean",
+     col = "red")
+```
+
+# Interpretation
+
+The samples follow a normal distribution. As the sample size increases the histogram is more reflective of the population.
+

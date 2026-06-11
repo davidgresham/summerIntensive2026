@@ -1,0 +1,324 @@
+/* ============================================================
+   Gresham Lab Summer Research Intensive 2026
+   Custom styles — NYU purple theme
+   ============================================================ */
+
+:root {
+  --nyu-purple:       #57068C;
+  --nyu-purple-dark:  #3d0464;
+  --nyu-purple-light: #f0e8f7;
+  --nyu-accent:       #8B2FC9;
+  --text-dark:        #212529;
+  --section-alt:      #f8f9fa;
+}
+
+/* ---- Global ---- */
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text-dark);
+}
+
+.text-purple  { color: var(--nyu-purple) !important; }
+.bg-purple    { background-color: var(--nyu-purple) !important; }
+
+/* ---- Navbar ---- */
+.navbar-custom {
+  background-color: var(--nyu-purple);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link {
+  color: rgba(255,255,255,0.92) !important;
+}
+.navbar-custom .navbar-brand {
+  font-weight: 700;
+  font-size: 1rem;
+}
+.navbar-custom .nav-link:hover,
+.navbar-custom .nav-link:focus {
+  color: #e0c9f5 !important;
+}
+.navbar-custom .navbar-toggler {
+  border-color: rgba(255,255,255,0.3);
+}
+
+/* ---- Hero ---- */
+.hero {
+  background-color: var(--nyu-purple);
+  background-image:
+    linear-gradient(rgba(62, 4, 100, 0.88), rgba(87, 6, 140, 0.88)),
+    url('../../Photos/IMG_9671.jpeg');
+  background-size: cover;
+  background-position: center 30%;
+  color: white;
+  padding: 5rem 0 4rem;
+}
+.hero-eyebrow {
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+.hero .lead {
+  font-size: 1.15rem;
+  opacity: 0.88;
+}
+.hero-desc { opacity: 0.85; }
+
+/* Hero stat cards */
+.stat-card {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 0.5rem;
+  padding: 1.1rem 0.75rem;
+  text-align: center;
+  backdrop-filter: blur(4px);
+}
+.stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.78rem;
+  opacity: 0.85;
+  margin-top: 0.3rem;
+}
+
+/* ---- Section headings ---- */
+.section-heading {
+  color: var(--nyu-purple);
+  font-weight: 700;
+  border-bottom: 3px solid var(--nyu-purple);
+  padding-bottom: 0.5rem;
+  margin-bottom: 2rem;
+  display: inline-block;
+}
+
+/* ---- About section ---- */
+.logistic-box {
+  background-color: var(--nyu-purple-light);
+  border-left: 4px solid var(--nyu-purple);
+}
+
+/* ---- Project cards ---- */
+.project-card {
+  border: none;
+  border-top: 4px solid var(--nyu-purple);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(87,6,140,0.15);
+}
+.project-icon {
+  font-size: 2rem;
+  color: var(--nyu-purple);
+}
+
+/* ---- Topics ---- */
+.topic-category {
+  background-color: var(--nyu-purple);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+.topic-list li {
+  padding: 0.2rem 0;
+  font-size: 0.92rem;
+}
+.topic-list .bi-check2 { color: var(--nyu-purple); }
+
+/* ---- Student cards ---- */
+.student-card {
+  border: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.student-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(87,6,140,0.12);
+}
+.student-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: var(--nyu-purple-light);
+  border: 3px solid var(--nyu-purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+}
+.student-avatar svg {
+  width: 46px;
+  height: 46px;
+  fill: var(--nyu-purple);
+}
+
+/* ---- Buttons ---- */
+.btn-nyu {
+  background-color: var(--nyu-purple);
+  color: white;
+  border: none;
+}
+.btn-nyu:hover:not(:disabled) {
+  background-color: var(--nyu-purple-dark);
+  color: white;
+}
+.btn-nyu.disabled,
+.btn-nyu[disabled] {
+  background-color: #b89fcc;
+  cursor: default;
+}
+
+/* ---- Schedule accordion ---- */
+.accordion-button:not(.collapsed) {
+  background-color: var(--nyu-purple-light);
+  color: var(--nyu-purple);
+  font-weight: 600;
+  box-shadow: none;
+}
+.accordion-button:focus {
+  box-shadow: 0 0 0 0.2rem rgba(87,6,140,0.2);
+}
+.accordion-button::after {
+  filter: none;
+}
+.accordion-button:not(.collapsed)::after {
+  filter: invert(24%) sepia(96%) saturate(2000%) hue-rotate(265deg) brightness(60%);
+}
+.schedule-day-badge {
+  background-color: var(--nyu-purple);
+  color: white;
+  padding: 0.2rem 0.65rem;
+  border-radius: 1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-right: 0.75rem;
+  white-space: nowrap;
+}
+.schedule-section-title {
+  font-weight: 600;
+  color: var(--nyu-purple);
+  margin-top: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+.accordion-body ul {
+  margin-bottom: 0;
+  padding-left: 1.25rem;
+}
+.accordion-body li { font-size: 0.92rem; }
+
+/* ---- Assignment cards ---- */
+.assignment-card {
+  border: 1px solid #e0d0ee;
+  border-left: 4px solid var(--nyu-purple);
+  border-radius: 0.375rem;
+  transition: box-shadow 0.2s ease;
+  background: white;
+  text-decoration: none;
+  color: var(--text-dark);
+}
+.assignment-card:hover {
+  box-shadow: 0 4px 14px rgba(87,6,140,0.13);
+}
+.assignment-card h6 { color: var(--nyu-purple); }
+.assignment-card p  { color: #6c757d; }
+
+/* ---- Photo Gallery ---- */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .gallery-grid { grid-template-columns: 1fr; }
+}
+.gallery-item {
+  overflow: hidden;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  aspect-ratio: 4 / 3;
+  background: #e9ecef;
+}
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+  display: block;
+}
+.gallery-item:hover img {
+  transform: scale(1.06);
+}
+
+/* ---- Lightbox ---- */
+.lightbox-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-overlay.active { display: flex; }
+.lightbox-img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 0.25rem;
+  box-shadow: 0 0 40px rgba(0,0,0,0.5);
+}
+.lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 2.5rem;
+  color: white;
+  background: none;
+  border: none;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.8;
+}
+.lightbox-close:hover { opacity: 1; }
+
+/* ---- Resources ---- */
+.resource-link {
+  color: var(--text-dark);
+  text-decoration: none;
+  font-size: 0.93rem;
+  display: block;
+  padding: 0.2rem 0;
+}
+.resource-link:hover { color: var(--nyu-purple); text-decoration: underline; }
+
+/* ---- Footer ---- */
+footer {
+  background-color: var(--nyu-purple);
+  color: rgba(255,255,255,0.9);
+}
+footer a {
+  color: #d5b8f0;
+  text-decoration: none;
+}
+footer a:hover { color: white; text-decoration: underline; }
+
+/* ---- Section alternating backgrounds ---- */
+.section-alt        { background-color: var(--section-alt); }
+.section-purple-tint { background-color: var(--nyu-purple-light); }

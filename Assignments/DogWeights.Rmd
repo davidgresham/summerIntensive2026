@@ -1,0 +1,66 @@
+---
+title: "Dog Weights R Assignment"
+author: Alyssah Mack
+date: "Last compiled on `r Sys.Date()`"
+output:
+  html_notebook:
+    toc: true
+    toc_float: true
+    theme: flatly
+---
+
+# Step 1
+
+Read dog weights file into R studio
+```{r}
+dogData <- read.csv("data/dog_weights.csv")
+```
+
+Make a boxplot comparing the weights of beagles, pitbulls, and dalmatians. Assign each a color, add a title, y-axis label, and legend.
+```{r}
+boxplot(dog_weight ~ dog_type, data=dogData, 
+    xlab="Dog Type", 
+    ylab="Dog Weight (lbs)", 
+    col=c("lightpink", "lightgreen", "lightblue"),
+    main="Weights of Different Dog Breeds",
+    cex.lab=0.75,
+    cex.main=1)
+
+legend(0.5, 120, c("Beagle", "Pitbull", "Dalmatian"), 
+       fill = c("lightpink","lightblue", "lightgreen"),
+       cex=0.7)
+```
+# Step 2
+
+Transform the raw data values for pitbull weights to z-scores and make a plot with two panels. 
+```{r}
+library(dplyr)
+
+pitbull <- filter(dogData, dog_type=="pitbull")
+z_scores <- scale(pitbull$dog_weight)
+
+par(mfrow=c(1,2))
+hist((pitbull$dog_weight), main="Raw Pitbull Weights", xlab= "Weight (lbs)",
+  col="cornflowerblue")
+hist((z_scores), main="Z-score Pitbull Weights", xlab="z-score",
+     col="mediumpurple")
+```
+# Step 3
+
+Perform a one sample t-test to test whether the weight of beagles is significantly different from 21 lbs.
+```{r}
+beagle <- filter(dogData, dog_type=="beagle")
+
+t.test(beagle$dog_weight, mu=21)
+```
+
+Perform a two sample t-test to test whether the weight of pitbulls is significantly different from the weight of dalmatians.
+```{r}
+dalmatian <- filter(dogData, dog_type=="dalmatian")
+
+t.test(dalmatian$dog_weight, pitbull$dog_weight)
+```
+
+# Interpretation
+
+Dalmatians, on average, weigh the most compared to beagles and pitbulls, with beagles weighing the least. Z-scores shows how many standard deviations a value is away from the mean of the data set. Based on the z-score histogram of the pitbull weights, majority of the data lies within 1 standard deviation of the mean. T-tests determine if there are significant differences between the means of two groups, whether they are of unrelated groups or compared to theoretical means. The higher the result of the t-test, the more difference there is between the means being compared. Knowing this, the mean beagle weight is not significantly different from 21 lbs, but the mean weights of dalmatians and pitbulls are significantly different.
